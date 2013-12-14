@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Brendan.modules.Values.WorldValues;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import Brendan.modules.Items.ModItems;
 import net.minecraft.item.ItemStack;
 
 public class InfuserRecipes
@@ -30,18 +28,19 @@ public class InfuserRecipes
 	
 private InfuserRecipes()
 {
-	this.addSmelting(WorldValues.ItemImpureIngotField.itemID, 0, new ItemStack(WorldValues.ItemIngotField, 1, 0), 0.001f);
-    this.addSmelting(WorldValues.ItemImpureIngotField.itemID, 1, new ItemStack(WorldValues.ItemIngotField, 1, 1), 0.1f);
-    this.addSmelting(WorldValues.ItemImpureIngotField.itemID, 2, new ItemStack(WorldValues.ItemIngotField, 1, 2), 0.1f);
-    this.addSmelting(WorldValues.ItemImpureIngotField.itemID, 3, new ItemStack(WorldValues.ItemIngotField, 1, 3), 0.1f);
-    this.addSmelting(WorldValues.ItemImpureIngotField.itemID, 4, new ItemStack(WorldValues.ItemIngotField, 1, 4), 0.1f);
+	this.addSmelting(ModItems.ItemImpureIngotField.itemID, 0, new ItemStack(ModItems.ItemIngotField, 1, 0), 0.001f);
+    this.addSmelting(ModItems.ItemImpureIngotField.itemID, 1, new ItemStack(ModItems.ItemIngotField, 1, 1), 0.1f);
+    this.addSmelting(ModItems.ItemImpureIngotField.itemID, 2, new ItemStack(ModItems.ItemIngotField, 1, 2), 0.1f);
+    this.addSmelting(ModItems.ItemImpureIngotField.itemID, 3, new ItemStack(ModItems.ItemIngotField, 1, 3), 0.1f);
+    this.addSmelting(ModItems.ItemImpureIngotField.itemID, 4, new ItemStack(ModItems.ItemIngotField, 1, 4), 0.1f);
 
 }
 
     /**
      * Adds a smelting recipe.
      */
-    public void addSmelting(int par1, ItemStack par2ItemStack, float par3)
+    @SuppressWarnings("unchecked")
+	public void addSmelting(int par1, ItemStack par2ItemStack, float par3)
     {
         this.smeltingList.put(Integer.valueOf(par1), par2ItemStack);
         this.experienceList.put(Integer.valueOf(par2ItemStack.itemID), Float.valueOf(par3));
@@ -87,7 +86,7 @@ private InfuserRecipes()
         {
             return null;
         }
-        ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
+        ItemStack ret = metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
         if (ret != null) 
         {
             return ret;

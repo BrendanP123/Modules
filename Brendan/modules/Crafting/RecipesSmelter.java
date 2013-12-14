@@ -3,10 +3,8 @@ package Brendan.modules.Crafting;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import Brendan.modules.Values.WorldValues;
-
-import net.minecraft.block.Block;
+import Brendan.modules.Blocks.ModBlocks;
+import Brendan.modules.Items.ModItems;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -27,7 +25,7 @@ public class RecipesSmelter
 
 	private RecipesSmelter()
 	{
-		this.addDoubleItemSmelting(new ItemStack(WorldValues.InfusedBlueTorch), new ItemStack(WorldValues.ItemImpureIngotField, 3), new ItemStack(WorldValues.InfusedCoalField, 4));
+		this.addDoubleItemSmelting(new ItemStack(ModBlocks.InfusedBlueTorch), new ItemStack(ModItems.ItemImpureIngotField, 3), new ItemStack(ModItems.InfusedCoalField, 4));
 	}
 
 	public void addDoubleItemSmelting(ItemStack input1, ItemStack input2, ItemStack output)
@@ -43,7 +41,7 @@ public class RecipesSmelter
 		if (item1 == null){return null;}
 		if (item2 == null){return null;}
 
-		if (item1.itemID == WorldValues.ItemIngotField.itemID && item2.itemID == Item.diamond.itemID)
+		if (item1.itemID == ModItems.ItemIngotField.itemID && item2.itemID == Item.diamond.itemID)
 		{
 			return new ItemStack(Item.axeDiamond);
 		}
@@ -52,12 +50,12 @@ public class RecipesSmelter
 
 	public ItemStack getSlot1ReduceAmount(ItemStack input)
 	{
-		return (ItemStack) this.metaSmeltingCheckList1.get(Arrays.asList(input.itemID, input.getItemDamage()));
+		return this.metaSmeltingCheckList1.get(Arrays.asList(input.itemID, input.getItemDamage()));
 	}
 
 	public ItemStack getSlot2ReduceAmount(ItemStack input)
 	{
-		return (ItemStack) this.metaSmeltingCheckList2.get(Arrays.asList(input.itemID, input.getItemDamage()));
+		return this.metaSmeltingCheckList2.get(Arrays.asList(input.itemID, input.getItemDamage()));
 	}
 
 }

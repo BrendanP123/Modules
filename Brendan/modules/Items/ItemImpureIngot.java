@@ -2,9 +2,8 @@ package Brendan.modules.Items;
 
 
 import java.util.List;
-import Brendan.modules.ModulesCore;
+import Brendan.modules.Modules;
 import Brendan.modules.Lib.GlobalValues;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -37,7 +36,7 @@ public class ItemImpureIngot extends Item {
      */
 	public ItemImpureIngot(int id) {
 		super(id);
-        this.setCreativeTab(CreativeTabs.tabMisc);
+        this.setCreativeTab(Modules.creativeTabModulesItems);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
@@ -51,6 +50,7 @@ public class ItemImpureIngot extends Item {
     }
     
 	/** Register the textures with the IconRegister */
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister ir) {
 		iconBuffer = new Icon[types.length];

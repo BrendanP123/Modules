@@ -1,7 +1,5 @@
 package Brendan.modules.Proxy;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
-
 
 public class CommonProxy implements ICommonProxy {
     @Override

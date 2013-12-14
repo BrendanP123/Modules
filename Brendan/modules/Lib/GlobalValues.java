@@ -3,9 +3,6 @@ package Brendan.modules.Lib;
 
 
 import Brendan.modules.Inventory.GuiHandler;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 
 public class GlobalValues {
 	//Mod Info
@@ -17,13 +14,13 @@ public class GlobalValues {
 	public static final String ModNameMechanical = "Modules Mechanical Expansion";
 	public static final String ModIDMachines = "Modules|Mach";
 	public static final String ModNameMachines = "Modules Machines Expansion";
-	public static final String ModVersion = "2.0A";
+	public static final String ModVersion = "1.6.4_A";
+	public static final String CreativeTabModulesBlocks = "Module Blocks";
+	public static final String CreativeTabModulesItems = "Module Items";
 	
 
 	//Dependency variables
-	public static final String Core = "required-after:" + ModIDCore + "@" + ModVersion;
-	public static final String Machines = "required-after:" + ModIDMachines + "@" + ModVersion;
-	public static final String World = "required-after:" + ModIDWorld + "@" +  ModVersion;
+	public static final String Core = "required-after:" + MODID + "@" + ModVersion;
 
 
     //Texture Path
@@ -35,11 +32,6 @@ public class GlobalValues {
 	public static final String PATH_SOUNDS = "/sounds/";
 	public static final String PATH_MODELS = "/models/";
 	public static final String PATH_TEXTURES_MODELS = PATH_TEXTURES + "model/";
-	
-	
-	//Rendering ID's
-	public static int renderIDGlowingBrick;
-
 	
 	//Gui Texture Locations
 	public static final String infuser = "gui/InfuserDouble.png";

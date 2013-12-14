@@ -1,14 +1,9 @@
 package Brendan.modules.Proxy;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.EnumHelperClient;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
-import org.lwjgl.input.Keyboard;
-import Brendan.modules.Lib.GlobalValues;
-import Brendan.modules.Rendering.GlowBrickRender;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import Brendan.modules.Lib.RenderID;
+import Brendan.modules.Lib.RenderUtil;
+import Brendan.modules.Rendering.MetalStorageRender;
+import Brendan.modules.Rendering.OreRender;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -22,13 +17,19 @@ public class ClientProxy extends CommonProxy implements IClientProxy {
     @Override
     public void loadRendering() 
     {
-        RenderingRegistry.registerBlockHandler(new GlowBrickRender());
+        RenderingRegistry.registerBlockHandler(new MetalStorageRender());
+        RenderingRegistry.registerBlockHandler(new OreRender());
+        RenderUtil.loadRenderingUtils();
     }
     
     @Override
     public void loadRenderIds()
     {
-        GlobalValues.renderIDGlowingBrick = RenderingRegistry.getNextAvailableRenderId();
+        RenderID.renderIDGlowBrick = RenderingRegistry.getNextAvailableRenderId();
+        RenderID.renderIDRubyOre = RenderingRegistry.getNextAvailableRenderId();
+        RenderID.renderIDCustomDirt = RenderingRegistry.getNextAvailableRenderId();
+        RenderID.renderIDIngotStorage = RenderingRegistry.getNextAvailableRenderId();
+        RenderID.renderIDOre = RenderingRegistry.getNextAvailableRenderId();
     }
 
     @Override
@@ -47,6 +48,7 @@ public class ClientProxy extends CommonProxy implements IClientProxy {
     public void registerHandlers() 
     {
         super.registerHandlers();
+        TickRegistry.registerTickHandler(new RenderUtil(), Side.CLIENT);
     }
     
     @Override

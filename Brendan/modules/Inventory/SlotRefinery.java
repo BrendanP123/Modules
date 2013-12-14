@@ -5,9 +5,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.util.MathHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -22,11 +20,13 @@ public SlotRefinery(EntityPlayer par1EntityPlayer, IInventory par2IInventory, in
          this.thePlayer = par1EntityPlayer;
 }
 
+@Override
 public boolean isItemValid(ItemStack par1ItemStack)
 {
          return false;
 }
 
+@Override
 public ItemStack decrStackSize(int par1)
 {
          if (this.getHasStack())
@@ -37,18 +37,21 @@ public ItemStack decrStackSize(int par1)
          return super.decrStackSize(par1);
 }
 
+@Override
 public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
 {
          this.onCrafting(par2ItemStack);
          super.onPickupFromSlot(par1EntityPlayer, par2ItemStack);
 }
 
+@Override
 protected void onCrafting(ItemStack par1ItemStack, int par2)
 {
          this.field_75228_b += par2;
          this.onCrafting(par1ItemStack);
 }
 
+@Override
 protected void onCrafting(ItemStack par1ItemStack)
 {
          par1ItemStack.onCrafting(this.thePlayer.worldObj, this.thePlayer, this.field_75228_b);
@@ -65,9 +68,9 @@ protected void onCrafting(ItemStack par1ItemStack)
                  }
                  else if (var3 < 1.0F)
                  {
-                         var4 = MathHelper.floor_float((float)var2 * var3);
+                         var4 = MathHelper.floor_float(var2 * var3);
 
-                         if (var4 < MathHelper.ceiling_float_int((float)var2 * var3) && (float)Math.random() < (float)var2 * var3 - (float)var4)
+                         if (var4 < MathHelper.ceiling_float_int(var2 * var3) && (float)Math.random() < var2 * var3 - var4)
                          {
                                  ++var4;
                          }

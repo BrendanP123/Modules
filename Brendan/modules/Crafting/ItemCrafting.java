@@ -1,7 +1,7 @@
 package Brendan.modules.Crafting;
 
-import Brendan.modules.Values.WorldValues;
-import cpw.mods.fml.common.registry.GameRegistry;
+import Brendan.modules.Blocks.ModBlocks;
+import Brendan.modules.Items.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
@@ -15,11 +15,10 @@ public class ItemCrafting {
 	 * Initialise the recipes
 	 */
 	public static void initialise() {
-		FurnaceRecipes.smelting().addSmelting(WorldValues.BlockOreField.blockID, 0, new ItemStack(WorldValues.ItemImpureIngotField, 1, 0), 0.1F);
-		FurnaceRecipes.smelting().addSmelting(WorldValues.BlockOreField.blockID, 1, new ItemStack(WorldValues.ItemImpureIngotField, 1, 1), 0.1F);
-		FurnaceRecipes.smelting().addSmelting(WorldValues.BlockOreField.blockID, 2, new ItemStack(WorldValues.ItemImpureIngotField, 1, 2), 0.1F);
-		FurnaceRecipes.smelting().addSmelting(WorldValues.BlockOreField.blockID, 3, new ItemStack(WorldValues.ItemImpureIngotField, 1, 3), 0.1F);
-		FurnaceRecipes.smelting().addSmelting(WorldValues.BlockOreField.blockID, 4, new ItemStack(WorldValues.ItemImpureIngotField, 1, 4), 0.1F);
-		FurnaceRecipes.smelting().addSmelting(WorldValues.BlockOreField.blockID, 5, new ItemStack(WorldValues.ItemImpureIngotField, 1, 5), 0.1F);
+		FurnaceRecipes.smelting().addSmelting(ModBlocks.BlockOreField.blockID, 0, new ItemStack(ModItems.ItemImpureIngotField, 1, 0), 0.1F);
+		FurnaceRecipes.smelting().addSmelting(ModBlocks.BlockOreField.blockID, 1, new ItemStack(ModItems.ItemImpureIngotField, 1, 1), 0.1F);
+		FurnaceRecipes.smelting().addSmelting(ModBlocks.BlockOreField.blockID, 2, new ItemStack(ModItems.ItemImpureIngotField, 1, 2), 0.1F);
+		FurnaceRecipes.smelting().addSmelting(ModBlocks.BlockOreField.blockID, 3, new ItemStack(ModItems.ItemImpureIngotField, 1, 3), 0.1F);
+		FurnaceRecipes.smelting().addSmelting(ModBlocks.BlockOreField.blockID, 4, new ItemStack(ModItems.ItemImpureIngotField, 1, 4), 0.1F);
 	}
 }

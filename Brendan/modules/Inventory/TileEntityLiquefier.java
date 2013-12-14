@@ -1,28 +1,14 @@
 package Brendan.modules.Inventory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.lang.reflect.Field;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraftforge.common.*;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 
 public class TileEntityLiquefier extends TileEntity implements IInventory {
 
@@ -84,7 +70,7 @@ public class TileEntityLiquefier extends TileEntity implements IInventory {
         @Override
         public Packet getDescriptionPacket() {
             Packet132TileEntityData packet = (Packet132TileEntityData) super.getDescriptionPacket();
-            NBTTagCompound tag = packet != null ? packet.customParam1 : new NBTTagCompound();
+            NBTTagCompound tag = packet != null ? packet.data : new NBTTagCompound();
             tag.setFloat("time", timeLeft);
 
             return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, tag);
@@ -93,7 +79,7 @@ public class TileEntityLiquefier extends TileEntity implements IInventory {
         @Override
         public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
             super.onDataPacket(net, pkt);
-            NBTTagCompound tag = pkt.customParam1;
+            NBTTagCompound tag = pkt.data;
             timeLeft = tag.getFloat("time");
         }
 

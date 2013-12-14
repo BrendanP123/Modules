@@ -40,6 +40,7 @@ public ContainerRefinery(InventoryPlayer par1InventoryPlayer, TileEntityRefinery
          }
          
 }
+@Override
 public void addCraftingToCrafters(ICrafting par1ICrafting)
 {
          super.addCraftingToCrafters(par1ICrafting);
@@ -48,6 +49,7 @@ public void addCraftingToCrafters(ICrafting par1ICrafting)
          par1ICrafting.sendProgressBarUpdate(this, 2, this.furnace.currentItemBurnTime);
 }
 
+@Override
 public void detectAndSendChanges()
 {
     super.detectAndSendChanges();
@@ -77,6 +79,7 @@ public void detectAndSendChanges()
     this.lastItemBurnTime = this.furnace.currentItemBurnTime;
 }
 
+@Override
 @SideOnly(Side.CLIENT)
 public void updateProgressBar(int par1, int par2)
 {
@@ -96,11 +99,13 @@ public void updateProgressBar(int par1, int par2)
          }
 }
 
+@Override
 public boolean canInteractWith(EntityPlayer par1EntityPlayer)
 {
          return this.furnace.isUseableByPlayer(par1EntityPlayer);
 }
 
+@Override
 public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
 {
          ItemStack var3 = null;

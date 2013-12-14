@@ -1,35 +1,40 @@
 package Brendan.modules.Items;
 
 import java.util.List;
-
-
-import net.minecraft.creativetab.CreativeTabs;
+import Brendan.modules.Lib.Rarities;
+import Brendan.modules.Lib.RarityHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-public class ItemBlockStorage extends ItemBlock{
-	public static String[] types = {"blockCopper","blockTin","blockSilver","blockLead","blockTitanium"};
-	public static String[] names = {"Copper Block","Tin Block","Silver Block", "Lead Block","Titanium Block"};
-	public ItemBlockStorage(int id) {
-		super(id);
-		this.setMaxDamage(0);
-		this.setHasSubtypes(true);
+public class ItemBlockStorage extends ItemBlock {
+    public static String[] colours = new String[] { "Copper", "Tin", "Silver", "Lead", "Titanium" };
+	public static String[] types = new String[] {"blockCopper","blockTin","blockSilver","blockLead","blockTitanium"};
+	public static String[] names = new String[] {"Copper Storage","Tin Storage","Silver Storage", "Lead Storage","Titanium Storage"};
 
-	}
-		
-	
-	public int getMetadata(int meta) {
-		return meta;
-	}
-	
-	public String getUnlocalizedName(ItemStack is) {
-		
-		return types[is.getItemDamage()];
-	}
+    public ItemBlockStorage(int par1) {
+        super(par1);
+        setMaxDamage(0);
+        setHasSubtypes(true);
+    }
+    
+    @Override
+    public EnumRarity getRarity(ItemStack stack)
+    {
+        return RarityHelper.getCustomRarityType(Rarities.LEGENDARY);
+    }
+
+    @Override
+    public int getMetadata(int par1)
+    {
+        return par1;
+    }
+    
+    @SuppressWarnings("unchecked")
 	@Override
-	public void getSubItems(int id, CreativeTabs tab, List list) {
-		for (int meta = 0; meta < 5; meta++) {
-			list.add(new ItemStack(id, 1, meta));
-		}
-	} 
+    public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List list, boolean par4)
+    {
+        list.add(colours[(stack.getItemDamage() % 5)]);
+    }
 }

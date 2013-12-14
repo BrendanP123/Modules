@@ -3,7 +3,6 @@ package Brendan.modules.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Icon;
 
@@ -152,15 +151,6 @@ public class RenderingUtils {
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		}
 	}
-	
-	/**
-	 *  'adapted from MachineMuse's Modular Powersuits'~
-	 * Does the necessary openGL calls and calls the Minecraft font renderer to draw a string such that the xcoord is halfway through the string
-	 */
-    public static void drawString(String s, double x, double y) {
-    	RenderHelper.disableStandardItemLighting();
-    	getFontRenderer().drawStringWithShadow(s, (int) x, (int) y, new ColourUtils(0.75, 0.75, 0.75, 1).getInt());
-	}
     
     /**
      * Singleton pattern for FontRenderer
@@ -178,10 +168,10 @@ public class RenderingUtils {
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)0, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
-        tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)0, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-        tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)0, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
-        tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)0, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
+        tessellator.addVertexWithUV(par1 + 0, par2 + par6, 0, (par3 + 0) * f, (par4 + par6) * f1);
+        tessellator.addVertexWithUV(par1 + par5, par2 + par6, 0, (par3 + par5) * f, (par4 + par6) * f1);
+        tessellator.addVertexWithUV(par1 + par5, par2 + 0, 0, (par3 + par5) * f, (par4 + 0) * f1);
+        tessellator.addVertexWithUV(par1 + 0, par2 + 0, 0, (par3 + 0) * f, (par4 + 0) * f1);
         tessellator.draw();
     }
 	

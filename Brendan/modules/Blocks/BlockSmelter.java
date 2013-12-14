@@ -2,10 +2,9 @@ package Brendan.modules.Blocks;
 
 import java.util.Random;
 
-import Brendan.modules.ModulesMachines;
+import Brendan.modules.Modules;
 import Brendan.modules.Inventory.TileEntitySmelter;
 import Brendan.modules.Lib.GuiIds;
-import Brendan.modules.Values.MachineValues;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -44,12 +43,13 @@ public class BlockSmelter extends BlockContainer
 		this.isActive = par2;
 		setHardness(3.0F);
 		setResistance(5.0F);
+		this.setCreativeTab(Modules.creativeTabModulesBlocks);
 	}
 
 	@Override
 	public int idDropped(int par1, Random par2Random, int par3)
 	{
-		return MachineValues.SmelterIdle.blockID;
+		return ModBlocks.SmelterIdle.blockID;
 	}
 
 	@Override
@@ -71,6 +71,7 @@ public class BlockSmelter extends BlockContainer
 		this.setDefaultDirection(par1World, par2, par3, par4);
 	}
 
+	@Override
 	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
 	         if (par1World.isRemote)
@@ -82,7 +83,7 @@ public class BlockSmelter extends BlockContainer
 	TileEntitySmelter var10 = (TileEntitySmelter) par1World.getBlockTileEntity(par2, par3, par4);
 	if (var10 != null)
 	{
-		par5EntityPlayer.openGui(ModulesMachines.instance, GuiIds.SMELTER, par1World, par2, par3, par4);
+		par5EntityPlayer.openGui(Modules.instance, GuiIds.SMELTER, par1World, par2, par3, par4);
 	}
 	return true;
 	}
@@ -98,8 +99,8 @@ public class BlockSmelter extends BlockContainer
 		TileEntity tileentity = par1World.getBlockTileEntity(par2, par3, par4);
 		keepFurnaceInventory = true;
 
-		if (par0){par1World.setBlock(par2, par3, par4, MachineValues.SmelterActive.blockID);}
-		else{par1World.setBlock(par2, par3, par4, MachineValues.SmelterIdle.blockID);}
+		if (par0){par1World.setBlock(par2, par3, par4, ModBlocks.SmelterActive.blockID);}
+		else{par1World.setBlock(par2, par3, par4, ModBlocks.SmelterIdle.blockID);}
 
 		keepFurnaceInventory = false;
 		par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
@@ -131,48 +132,50 @@ public class BlockSmelter extends BlockContainer
 
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLiving par5EntityLiving, ItemStack par6ItemStack)
 	{
-		int l = MathHelper.floor_double((double)(par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int l = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		if (l == 0){par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);}
 		if (l == 1){par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);}
 		if (l == 2){par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);}
 		if (l == 3){par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);}
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
 	{
 		if (this.isActive)
 		{
 			int l = par1World.getBlockMetadata(par2, par3, par4);
-			float f = (float)par2 + 0.5F;
-			float f1 = (float)par3 + 0.0F + par5Random.nextFloat() * 6.0F / 16.0F;
-			float f2 = (float)par4 + 0.5F;
+			float f = par2 + 0.5F;
+			float f1 = par3 + 0.0F + par5Random.nextFloat() * 6.0F / 16.0F;
+			float f2 = par4 + 0.5F;
 			float f3 = 0.52F;
 			float f4 = par5Random.nextFloat() * 0.6F - 0.3F;
 
 			if (l == 4)
 			{
-				par1World.spawnParticle("smoke", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-				par1World.spawnParticle("flame", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
+				par1World.spawnParticle("smoke", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+				par1World.spawnParticle("flame", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
 			}
 			else if (l == 5)
 			{
-				par1World.spawnParticle("smoke", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-				par1World.spawnParticle("flame", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
+				par1World.spawnParticle("smoke", f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+				par1World.spawnParticle("flame", f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
 			}
 			else if (l == 2)
 			{
-				par1World.spawnParticle("smoke", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
-				par1World.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
+				par1World.spawnParticle("smoke", f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+				par1World.spawnParticle("flame", f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
 			}
 			else if (l == 3)
 			{
-				par1World.spawnParticle("smoke", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
-				par1World.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
+				par1World.spawnParticle("smoke", f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+				par1World.spawnParticle("flame", f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
 
+	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
 	{
 		if (!keepFurnaceInventory)
@@ -198,8 +201,8 @@ public class BlockSmelter extends BlockContainer
 							if (k1 > itemstack.stackSize){k1 = itemstack.stackSize;}
 
 							itemstack.stackSize -= k1;
-							EntityItem entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1),
-									(double)((float)par4 + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
+							EntityItem entityitem = new EntityItem(par1World, par2 + f, par3 + f1,
+									par4 + f2, new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
 
 							if (itemstack.hasTagCompound())
 							{
@@ -207,9 +210,9 @@ public class BlockSmelter extends BlockContainer
 							}
 
 							float f3 = 0.05F;
-							entityitem.motionX = (double)((float)this.furnaceRand.nextGaussian() * f3);
-							entityitem.motionY = (double)((float)this.furnaceRand.nextGaussian() * f3 + 0.2F);
-							entityitem.motionZ = (double)((float)this.furnaceRand.nextGaussian() * f3);
+							entityitem.motionX = (float)this.furnaceRand.nextGaussian() * f3;
+							entityitem.motionY = (float)this.furnaceRand.nextGaussian() * f3 + 0.2F;
+							entityitem.motionZ = (float)this.furnaceRand.nextGaussian() * f3;
 							par1World.spawnEntityInWorld(entityitem);
 						}
 					}
@@ -222,12 +225,14 @@ public class BlockSmelter extends BlockContainer
 		super.breakBlock(par1World, par2, par3, par4, par5, par6);
 	}
 
+	@Override
 	public Icon getIcon(int par1, int par2)
     {
         return par1 == 1 ? this.side : par1 == 0 ? this.bottom : (par1 == 1 ? this.front_active : (par1 != par2 ? this.blockIcon : this.front_active));
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
@@ -245,6 +250,6 @@ public class BlockSmelter extends BlockContainer
 	@Override
 	public int idPicked(World world, int x, int y, int z)
 	{
-		return MachineValues.SmelterIdle.blockID;
+		return ModBlocks.SmelterIdle.blockID;
 	}
 }

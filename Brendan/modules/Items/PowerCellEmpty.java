@@ -2,10 +2,9 @@ package Brendan.modules.Items;
 
 
 import java.util.List;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import Brendan.modules.ModulesCore;
+import Brendan.modules.Modules;
 import Brendan.modules.Lib.GlobalValues;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,9 +22,8 @@ import net.minecraft.util.Icon;
  */
 public class PowerCellEmpty extends Item {
 	/** Texture file names + code name */
-    public static String[] types = new String[] {"emptyPowercell", "powerCell"};     
-    
     /** Human-Readable names */
+    public static String[] types = new String[] {"emptyPowercell", "powerCell"};
     public static String[] names = new String[] {"Empty Power Cell", "Power Cell"};
     
     /** Icon Array */
@@ -38,7 +36,7 @@ public class PowerCellEmpty extends Item {
      */
 	public PowerCellEmpty(int id) {
 		super(id);
-        this.setCreativeTab(ModulesCore.Modules);
+        this.setCreativeTab(Modules.creativeTabModulesItems);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
@@ -52,6 +50,7 @@ public class PowerCellEmpty extends Item {
     }
     
 	/** Register the textures with the IconRegister */
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister ir) {
 		iconBuffer = new Icon[types.length];

@@ -5,12 +5,12 @@ import static net.minecraftforge.common.ForgeDirection.NORTH;
 import static net.minecraftforge.common.ForgeDirection.SOUTH;
 import static net.minecraftforge.common.ForgeDirection.WEST;
 import java.util.Random;
-import Brendan.modules.ModulesCore;
+
+import Brendan.modules.Modules;
 import Brendan.modules.Lib.GlobalValues;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
@@ -20,32 +20,31 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockTorchWhite extends Block
-{
-    private Object TileEntityTerra;
-
-	public BlockTorchWhite(int par1, int par2)
+{   
+    public BlockTorchWhite(int par1)
     {
-        super(par1, Material.circuits);
+    	super(par1, Material.circuits);
         this.setTickRandomly(true);
-        this.setCreativeTab(ModulesCore.Modules);
+        this.setCreativeTab(Modules.creativeTabModulesBlocks);
         this.setUnlocalizedName("WhiteTorch");
+    }
+    
+	@Override
+	public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.blockIcon = par1IconRegister.registerIcon(GlobalValues.MODID + ":" + "whiteTorch");
     }
 	
     public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
     {
         return this.blockIcon;
     }
-	
-	public void registerIcons(IconRegister par1IconRegister)
-    {
-        this.blockIcon = par1IconRegister.registerIcon(GlobalValues.MODID + ":" + "whiteTorch");
-    }
-
 
     /**
      * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
      * cleared to be reused)
      */
+    @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
         return null;
@@ -55,6 +54,7 @@ public class BlockTorchWhite extends Block
      * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
      * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
      */
+    @Override
     public boolean isOpaqueCube()
     {
         return false;
@@ -63,6 +63,7 @@ public class BlockTorchWhite extends Block
     /**
      * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
      */
+    @Override
     public boolean renderAsNormalBlock()
     {
         return false;
@@ -71,6 +72,7 @@ public class BlockTorchWhite extends Block
     /**
      * The type of render function that is called for this block
      */
+    @Override
     public int getRenderType()
     {
         return 2;
@@ -87,14 +89,15 @@ public class BlockTorchWhite extends Block
         }
         else
         {
-            int l = par1World.getBlockId(par2, par3, par4);
-            return (Block.blocksList[l] != null && Block.blocksList[l].canPlaceTorchOnTop(par1World, par2, par3, par4));
+            int var5 = par1World.getBlockId(par2, par3, par4);
+            return (Block.blocksList[var5] != null && Block.blocksList[var5].canPlaceTorchOnTop(par1World, par2, par3, par4));
         }
     }
 
     /**
      * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
      */
+    @Override
     public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
     {
         return par1World.isBlockSolidOnSide(par2 - 1, par3, par4, EAST,  true) ||
@@ -107,41 +110,43 @@ public class BlockTorchWhite extends Block
     /**
      * Called when a block is placed using its ItemBlock. Args: World, X, Y, Z, side, hitX, hitY, hitZ, block metadata
      */
+    @Override
     public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8, int par9)
     {
-        int j1 = par9;
+        int var10 = par9;
 
         if (par5 == 1 && this.canPlaceTorchOn(par1World, par2, par3 - 1, par4))
         {
-            j1 = 5;
+            var10 = 5;
         }
 
         if (par5 == 2 && par1World.isBlockSolidOnSide(par2, par3, par4 + 1, NORTH, true))
         {
-            j1 = 4;
+            var10 = 4;
         }
 
         if (par5 == 3 && par1World.isBlockSolidOnSide(par2, par3, par4 - 1, SOUTH, true))
         {
-            j1 = 3;
+            var10 = 3;
         }
 
         if (par5 == 4 && par1World.isBlockSolidOnSide(par2 + 1, par3, par4, WEST, true))
         {
-            j1 = 2;
+            var10 = 2;
         }
 
         if (par5 == 5 && par1World.isBlockSolidOnSide(par2 - 1, par3, par4, EAST, true))
         {
-            j1 = 1;
+            var10 = 1;
         }
 
-        return j1;
+        return var10;
     }
 
     /**
      * Ticks the block if it's been scheduled
      */
+    @Override
     public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
         super.updateTick(par1World, par2, par3, par4, par5Random);
@@ -155,29 +160,30 @@ public class BlockTorchWhite extends Block
     /**
      * Called whenever the block is added into the world. Args: world, x, y, z
      */
+    @Override
     public void onBlockAdded(World par1World, int par2, int par3, int par4)
     {
         if (par1World.getBlockMetadata(par2, par3, par4) == 0)
         {
             if (par1World.isBlockSolidOnSide(par2 - 1, par3, par4, EAST, true))
             {
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, 1, par4);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 1, 0);
             }
             else if (par1World.isBlockSolidOnSide(par2 + 1, par3, par4, WEST, true))
             {
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, par4);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 0);
             }
             else if (par1World.isBlockSolidOnSide(par2, par3, par4 - 1, SOUTH, true))
             {
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, par4);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 0);
             }
             else if (par1World.isBlockSolidOnSide(par2, par3, par4 + 1, NORTH, true))
             {
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, par4);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 0);
             }
             else if (this.canPlaceTorchOn(par1World, par2, par3 - 1, par4))
             {
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, par4);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 0);
             }
         }
 
@@ -188,6 +194,7 @@ public class BlockTorchWhite extends Block
      * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
      * their own) Args: x, y, z, neighbor blockID
      */
+    @Override
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5)
     {
         if (this.dropTorchIfCantStay(par1World, par2, par3, par4))
@@ -223,7 +230,7 @@ public class BlockTorchWhite extends Block
             if (var7)
             {
                 this.dropBlockAsItem(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), 0);
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, 0, var6);
+                par1World.setBlock(par2, par3, par4, 0);
             }
         }
     }
@@ -232,14 +239,14 @@ public class BlockTorchWhite extends Block
      * Tests if the block can remain at its current location and will drop as an item if it is unable to stay. Returns
      * True if it can stay and False if it drops. Args: world, x, y, z
      */
-    protected boolean dropTorchIfCantStay(World par1World, int par2, int par3, int par4)
+    private boolean dropTorchIfCantStay(World par1World, int par2, int par3, int par4)
     {
         if (!this.canPlaceBlockAt(par1World, par2, par3, par4))
         {
             if (par1World.getBlockId(par2, par3, par4) == this.blockID)
             {
                 this.dropBlockAsItem(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), 0);
-                par1World.setBlockToAir(par2, par3, par4);
+                par1World.setBlock(par2, par3, par4, 0);
             }
 
             return false;
@@ -254,6 +261,7 @@ public class BlockTorchWhite extends Block
      * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit. Args: world,
      * x, y, z, startVec, endVec
      */
+    @Override
     public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3)
     {
         int var7 = par1World.getBlockMetadata(par2, par3, par4) & 7;
@@ -284,6 +292,7 @@ public class BlockTorchWhite extends Block
         return super.collisionRayTrace(par1World, par2, par3, par4, par5Vec3, par6Vec3);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
 
     /**
@@ -291,35 +300,37 @@ public class BlockTorchWhite extends Block
      */
     public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-        int var6 = par1World.getBlockMetadata(par2, par3, par4);
-        double var7 = (double)((float)par2 + 0.5F);
-        double var9 = (double)((float)par3 + 0.7F);
-        double var11 = (double)((float)par4 + 0.5F);
-        double var13 = 0.2199999988079071D;
-        double var15 = 0.27000001072883606D;
+        int l = par1World.getBlockMetadata(par2, par3, par4);
+        double d0 = par2 + 0.5F;
+        double d1 = par3 + 0.7F;
+        double d2 = par4 + 0.5F;
+        double d3 = 0.2199999988079071D;
+        double d4 = 0.27000001072883606D;
 
-        if (var6 == 1)
+        if (l == 1)
         {
-            par1World.spawnParticle("instantSpell", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
-
+            par1World.spawnParticle("instantSpell", d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("instantSpell", d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
         }
-        else if (var6 == 2)
+        else if (l == 2)
         {
-            par1World.spawnParticle("instantSpell", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
-
+            par1World.spawnParticle("instantSpell", d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("instantSpell", d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
         }
-        else if (var6 == 3)
+        else if (l == 3)
         {
-            par1World.spawnParticle("instantSpell", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
-
+            par1World.spawnParticle("instantSpell", d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("instantSpell", d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
         }
-        else if (var6 == 4)
+        else if (l == 4)
         {
-            par1World.spawnParticle("instantSpell", var7, var9 + var13, var11 + var15, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("instantSpell", d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("instantSpell", d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
         }
         else
         {
-            par1World.spawnParticle("instantSpell", var7, var9, var11, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("instantSpell", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("instantSpell", d0, d1, d2, 0.0D, 0.0D, 0.0D);
         }
     }
 }

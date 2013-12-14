@@ -1,7 +1,5 @@
 package Brendan.modules.Lib;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.ResourceLocation;
 
@@ -15,7 +13,7 @@ public class ConvertUtil {
     {
         ChatMessageComponent chatComponent = new ChatMessageComponent();
         
-        chatComponent.func_111079_a(message);
+        chatComponent.addText(message);
         
         return chatComponent;
     }

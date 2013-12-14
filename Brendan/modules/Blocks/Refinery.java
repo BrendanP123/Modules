@@ -1,43 +1,42 @@
 package Brendan.modules.Blocks;
 
-import java.util.Random;
-
-import Brendan.modules.ModulesCore;
-import Brendan.modules.ModulesMachines;
+import Brendan.modules.Modules;
 import Brendan.modules.Inventory.TileEntityRefinery;
 import Brendan.modules.Lib.GuiIds;
-import Brendan.modules.Values.MachineValues;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.dispenser.PositionImpl;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class Refinery extends BlockContainer {
-	private Random furnaceRand = new Random();
+public class Refinery extends BlockContainer
+{
+    /**
+     * Is the random generator used by Refinery to drop the inventory contents in random directions.
+     */
+    private final Random RefineryRand = new Random();
 
-	private final boolean isActive;
+    /** True if this is an active Refinery, false if idle */
+    private final boolean isActive;
 
+    /**
+     * This flag is used to prevent the Refinery inventory to be dropped upon block removal, is used internally when the
+     * Refinery block changes from idle to active and vice-versa.
+     */
+    private static boolean keepRefineryInventory;
 	@SideOnly(Side.CLIENT)
 	private Icon side;
 	@SideOnly(Side.CLIENT)
@@ -47,20 +46,23 @@ public class Refinery extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	private Icon bottom;
 
-	private static boolean keepFurnaceInventory = false;
-
-	public Refinery(int par1, boolean par2) {
-		super(par1, Material.rock);
-		this.isActive = par2;
-		this.setCreativeTab(ModulesCore.Modules);
+    public Refinery(int par1, boolean par2)
+    {
+        super(par1, Material.rock);
+        this.isActive = par2;
+        this.setCreativeTab(Modules.creativeTabModulesBlocks);
 		this.setUnlocalizedName("Refinery");
-	}
+    }
 
-	public int idDropped(int par1, Random par2Random, int par3) {
-		return MachineValues.RefineryIdle.blockID;
-	}
+    /**
+     * Returns the ID of the items to drop on destruction.
+     */
+    public int idDropped(int par1, Random par2Random, int par3)
+    {
+        return ModBlocks.RefineryIdle.blockID;
+    }
 
-	/**
+    /**
      * Called whenever the block is added into the world. Args: world, x, y, z
      */
     public void onBlockAdded(World par1World, int par2, int par3, int par4)
@@ -68,22 +70,6 @@ public class Refinery extends BlockContainer {
         super.onBlockAdded(par1World, par2, par3, par4);
         this.setDefaultDirection(par1World, par2, par3, par4);
     }
-    
-    public static IPosition getIPositionFromBlockSource(IBlockSource par0IBlockSource)
-    {
-        EnumFacing enumfacing = getFacing(par0IBlockSource.getBlockMetadata());
-        double d0 = par0IBlockSource.getX() + 0.7D * (double)enumfacing.getFrontOffsetX();
-        double d1 = par0IBlockSource.getY() + 0.7D * (double)enumfacing.getFrontOffsetY();
-        double d2 = par0IBlockSource.getZ() + 0.7D * (double)enumfacing.getFrontOffsetZ();
-        return new PositionImpl(d0, d1, d2);
-    }
-    
-
-    public static EnumFacing getFacing(int par0)
-    {
-        return EnumFacing.getFront(par0 & 7);
-    }
-
 
     /**
      * set a blocks direction
@@ -122,12 +108,17 @@ public class Refinery extends BlockContainer {
         }
     }
 
-	
-    public Icon getIcon(int par1, int par2)
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
+     */
+    @Override
+	public Icon getIcon(int par1, int par2)
     {
         return par1 == 1 ? this.side : par1 == 0 ? this.bottom : (par1 == 1 ? this.front_active : (par1 != par2 ? this.blockIcon : this.front_active));
     }
-
+    
     @SideOnly(Side.CLIENT)
 
     /**
@@ -136,12 +127,62 @@ public class Refinery extends BlockContainer {
      */
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon("Modules:Refinery_side");
+    	this.blockIcon = par1IconRegister.registerIcon("Modules:Refinery_side");
         this.front_active = par1IconRegister.registerIcon(this.isActive ? "Modules:Refinery_active_front" : "Modules:Refinery_front");
         this.side = par1IconRegister.registerIcon("Modules:Refinery_side");
-        this.bottom = par1IconRegister.registerIcon("Modules:Refinery_side");
- 
     }
+
+    /**
+     * Called upon block activation (right click on the block.)
+     */
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+    {
+        if (par1World.isRemote)
+        {
+            return true;
+        }
+        else
+        {
+            TileEntityRefinery tileentityRefinery = (TileEntityRefinery)par1World.getBlockTileEntity(par2, par3, par4);
+
+            if (tileentityRefinery != null)
+            {
+            	par5EntityPlayer.openGui(Modules.instance, GuiIds.REFINERY, par1World, par2, par3, par4);
+            }
+
+            return true;
+        }
+    }
+
+    /**
+     * Update which block ID the Refinery is using depending on whether or not it is burning
+     */
+    public static void updateRefineryBlockState(boolean par0, World par1World, int par2, int par3, int par4)
+    {
+        int l = par1World.getBlockMetadata(par2, par3, par4);
+        TileEntity tileentity = par1World.getBlockTileEntity(par2, par3, par4);
+        keepRefineryInventory = true;
+
+        if (par0)
+        {
+            par1World.setBlock(par2, par3, par4, ModBlocks.RefineryActive.blockID);
+        }
+        else
+        {
+            par1World.setBlock(par2, par3, par4, ModBlocks.RefineryIdle.blockID);
+        }
+
+        keepRefineryInventory = false;
+        par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
+
+        if (tileentity != null)
+        {
+            tileentity.validate();
+            par1World.setBlockTileEntity(par2, par3, par4, tileentity);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
 
     /**
      * A randomly called display update to be able to add particles or other items for display
@@ -180,53 +221,14 @@ public class Refinery extends BlockContainer {
         }
     }
 
-	public boolean onBlockActivated(World par1World, int par2, int par3,
-			int par4, EntityPlayer par5EntityPlayer, int par6, float par7,
-			float par8, float par9) {
-		if (par1World.isRemote) {
-			return true;
-		} else if (!par5EntityPlayer.isSneaking()) {
-			TileEntityRefinery var10 = (TileEntityRefinery) par1World
-					.getBlockTileEntity(par2, par3, par4);
-			if (var10 != null) {
-				par5EntityPlayer.openGui(ModulesMachines.instance, GuiIds.REFINERY,
-						par1World, par2, par3, par4);
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public static void updateFurnaceBlockState(boolean par0, World par1World, int par2, int par3, int par4)
+    /**
+     * Returns a new instance of a block's tile entity class. Called on placing the block.
+     */
+    public TileEntity createNewTileEntity(World par1World)
     {
-        int l = par1World.getBlockMetadata(par2, par3, par4);
-        TileEntity tileentity = par1World.getBlockTileEntity(par2, par3, par4);
-        keepFurnaceInventory = true;
-
-        if (par0)
-        {
-            par1World.setBlock(par2, par3, par4, MachineValues.RefineryActive.blockID);
-        }
-        else
-        {
-            par1World.setBlock(par2, par3, par4, MachineValues.RefineryIdle.blockID);
-        }
-
-        keepFurnaceInventory = false;
-        par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
-
-        if (tileentity != null)
-        {
-            tileentity.validate();
-            par1World.setBlockTileEntity(par2, par3, par4, tileentity);
-        }
+        return new TileEntityRefinery();
     }
 
-	public TileEntity createNewTileEntity(World par1World) {
-		return new TileEntityRefinery();
-	}
-	
     /**
      * Called when the block is placed in the world.
      */
@@ -256,61 +258,91 @@ public class Refinery extends BlockContainer {
 
         if (par6ItemStack.hasDisplayName())
         {
-            ((TileEntityFurnace)par1World.getBlockTileEntity(par2, par3, par4)).setGuiDisplayName(par6ItemStack.getDisplayName());
-      
+            ((TileEntityRefinery)par1World.getBlockTileEntity(par2, par3, par4)).setGuiDisplayName(par6ItemStack.getDisplayName());
         }
     }
 
-	public void breakBlock(World par1World, int par2, int par3, int par4,
-			int par5, int par6) {
-		if (!keepFurnaceInventory) {
-			TileEntityRefinery var7 = (TileEntityRefinery) par1World
-					.getBlockTileEntity(par2, par3, par4);
+    /**
+     * Called on server worlds only when the block has been replaced by a different block ID, or the same block with a
+     * different metadata value, but before the new metadata value is set. Args: World, x, y, z, old block ID, old
+     * metadata
+     */
+    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
+    {
+        if (!keepRefineryInventory)
+        {
+            TileEntityRefinery tileentityRefinery = (TileEntityRefinery)par1World.getBlockTileEntity(par2, par3, par4);
 
-			if (var7 != null) {
-				for (int var8 = 0; var8 < var7.getSizeInventory(); ++var8) {
-					ItemStack var9 = var7.getStackInSlot(var8);
+            if (tileentityRefinery != null)
+            {
+                for (int j1 = 0; j1 < tileentityRefinery.getSizeInventory(); ++j1)
+                {
+                    ItemStack itemstack = tileentityRefinery.getStackInSlot(j1);
 
-					if (var9 != null) {
-						float var10 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
-						float var11 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
-						float var12 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
+                    if (itemstack != null)
+                    {
+                        float f = this.RefineryRand.nextFloat() * 0.8F + 0.1F;
+                        float f1 = this.RefineryRand.nextFloat() * 0.8F + 0.1F;
+                        float f2 = this.RefineryRand.nextFloat() * 0.8F + 0.1F;
 
-						while (var9.stackSize > 0) {
-							int var13 = this.furnaceRand.nextInt(21) + 10;
+                        while (itemstack.stackSize > 0)
+                        {
+                            int k1 = this.RefineryRand.nextInt(21) + 10;
 
-							if (var13 > var9.stackSize) {
-								var13 = var9.stackSize;
-							}
+                            if (k1 > itemstack.stackSize)
+                            {
+                                k1 = itemstack.stackSize;
+                            }
 
-							var9.stackSize -= var13;
-							EntityItem var14 = new EntityItem(par1World,
-									(double) ((float) par2 + var10),
-									(double) ((float) par3 + var11),
-									(double) ((float) par4 + var12),
-									new ItemStack(var9.itemID, var13,
-											var9.getItemDamage()));
+                            itemstack.stackSize -= k1;
+                            EntityItem entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
 
-							if (var9.hasTagCompound()) {
-								var14.getEntityItem().setTagCompound(
-										(NBTTagCompound) var9.getTagCompound()
-												.copy());
-							}
+                            if (itemstack.hasTagCompound())
+                            {
+                                entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+                            }
 
-							float var15 = 0.05F;
-							var14.motionX = (double) ((float) this.furnaceRand
-									.nextGaussian() * var15);
-							var14.motionY = (double) ((float) this.furnaceRand
-									.nextGaussian() * var15 + 0.2F);
-							var14.motionZ = (double) ((float) this.furnaceRand
-									.nextGaussian() * var15);
-							par1World.spawnEntityInWorld(var14);
-						}
-					}
-				}
-			}
-		}
+                            float f3 = 0.05F;
+                            entityitem.motionX = (double)((float)this.RefineryRand.nextGaussian() * f3);
+                            entityitem.motionY = (double)((float)this.RefineryRand.nextGaussian() * f3 + 0.2F);
+                            entityitem.motionZ = (double)((float)this.RefineryRand.nextGaussian() * f3);
+                            par1World.spawnEntityInWorld(entityitem);
+                        }
+                    }
+                }
 
-		super.breakBlock(par1World, par2, par3, par4, par5, par6);
-	}
+                par1World.func_96440_m(par2, par3, par4, par5);
+            }
+        }
+
+        super.breakBlock(par1World, par2, par3, par4, par5, par6);
+    }
+
+    /**
+     * If this returns true, then comparators facing away from this block will use the value from
+     * getComparatorInputOverride instead of the actual redstone signal strength.
+     */
+    public boolean hasComparatorInputOverride()
+    {
+        return true;
+    }
+
+    /**
+     * If hasComparatorInputOverride returns true, the return value from this is used instead of the redstone signal
+     * strength when this block inputs to a comparator.
+     */
+    public int getComparatorInputOverride(World par1World, int par2, int par3, int par4, int par5)
+    {
+        return Container.calcRedstoneFromInventory((IInventory)par1World.getBlockTileEntity(par2, par3, par4));
+    }
+
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
+     */
+    public int idPicked(World par1World, int par2, int par3, int par4)
+    {
+        return ModBlocks.RefineryIdle.blockID;
+    }
 }

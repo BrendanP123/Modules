@@ -78,6 +78,7 @@ public class ContainerSmelter extends Container
 		this.lastItemBurnTime = this.furnace.currentItemBurnTime;
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int par1, int par2)
 	{

@@ -23,11 +23,13 @@ public SlotCrafting(EntityPlayer par1EntityPlayer, IInventory par2IInventory, II
          this.craftMatrix = par2IInventory;
 }
 
+@Override
 public boolean isItemValid(ItemStack par1ItemStack)
 {
          return false;
 }
 
+@Override
 public ItemStack decrStackSize(int par1)
 {
          if (this.getHasStack())
@@ -38,18 +40,21 @@ public ItemStack decrStackSize(int par1)
          return super.decrStackSize(par1);
 }
 
+@Override
 protected void onCrafting(ItemStack par1ItemStack, int par2)
 {
          this.amountCrafted += par2;
          this.onCrafting(par1ItemStack);
 }
 
+@Override
 protected void onCrafting(ItemStack par1ItemStack)
 {
          par1ItemStack.onCrafting(this.thePlayer.worldObj, this.thePlayer, this.amountCrafted);
          this.amountCrafted = 0;
 }
 
+@Override
 public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
 {
          GameRegistry.onItemCrafted(par1EntityPlayer, par2ItemStack, craftMatrix);

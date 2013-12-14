@@ -1,8 +1,7 @@
 package Brendan.modules.Items;
 
-
 import java.util.List;
-import Brendan.modules.ModulesCore;
+import Brendan.modules.Modules;
 import Brendan.modules.Lib.GlobalValues;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -13,13 +12,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 
-
-/**
- * Meta-data item for the 5 ingots.
- * 
- * @author Sparkst3r
- *
- */
 public class ItemIngot extends Item {
 	/** Texture file names + code name */
     public static String[] types = new String[] {"ingotCopper", "ingotTin", "ingotSilver", "ingotLead", "ingotTitanium"};     
@@ -37,7 +29,7 @@ public class ItemIngot extends Item {
      */
 	public ItemIngot(int id) {
 		super(id);
-        this.setCreativeTab(ModulesCore.Modules);
+        this.setCreativeTab(Modules.creativeTabModulesItems);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		GameRegistry.registerItem(this, "ingots");
@@ -51,6 +43,7 @@ public class ItemIngot extends Item {
     }
     
 	/** Register the textures with the IconRegister */
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister ir) {
 		iconBuffer = new Icon[types.length];
