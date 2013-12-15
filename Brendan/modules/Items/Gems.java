@@ -21,11 +21,12 @@ import net.minecraft.util.Icon;
  * @author Sparkst3r
  *
  */
-public class Electrode extends Item {
+public class Gems extends Item {
 	/** Texture file names + code name */
     /** Human-Readable names */
-    public static String[] types = new String[] {"unrefinedElectrode", "electrode"};     
-    public static String[] names = new String[] {"Unrefined Electrode", "Electrode"};
+    public static String[] types = new String[] {"RubyGem", "SapphireGem"}; 
+    public static String[] OreD = new String[] {"gemRuby", "gemSapphire"}; 
+    public static String[] names = new String[] {"Ruby", "Sapphire"};
     
     /** Icon Array */
     @SideOnly(Side.CLIENT)
@@ -35,7 +36,7 @@ public class Electrode extends Item {
      * Constructor
      * @param id Item ID
      */
-	public Electrode(int id) {
+	public Gems(int id) {
 		super(id);
         this.setCreativeTab(Modules.creativeTabModulesItems);
 		this.setHasSubtypes(true);

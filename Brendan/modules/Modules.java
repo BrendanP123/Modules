@@ -1,6 +1,9 @@
 package Brendan.modules;
 
+import java.io.File;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
 import Brendan.modules.Blocks.ModBlocks;
 import Brendan.modules.Crafting.BlockCrafting;
 import Brendan.modules.Crafting.ItemCrafting;
@@ -8,6 +11,7 @@ import Brendan.modules.Items.ModItems;
 import Brendan.modules.Lib.CreativeTabModulesBlocks;
 import Brendan.modules.Lib.CreativeTabModulesItems;
 import Brendan.modules.Lib.GlobalValues;
+import Brendan.modules.Lib.Reference;
 import Brendan.modules.Proxy.CommonProxy;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -47,9 +51,9 @@ public class Modules {
 	//Called during the pre-load phase
 	@EventHandler
     public void PreLoad(FMLPreInitializationEvent event) {
-    	proxy.loadRenderIds();
+		proxy.loadRenderIds();
         proxy.registerHandlers();
-        
+        Reference.initializeConfig();
     }
 	
 	//Called during the loading phase
@@ -57,7 +61,7 @@ public class Modules {
 	public void load(FMLInitializationEvent event) {
     	ModBlocks.initialize();
     	ModItems.initialize();
-		ItemCrafting.initialise();
+    	ItemCrafting.initialise();
 		BlockCrafting.initialise();
 	}
 	

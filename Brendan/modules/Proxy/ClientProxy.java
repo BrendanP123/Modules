@@ -1,7 +1,11 @@
 package Brendan.modules.Proxy;
 
+import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.MinecraftForgeClient;
+import Brendan.modules.Items.ModItems;
 import Brendan.modules.Lib.RenderID;
 import Brendan.modules.Lib.RenderUtil;
+import Brendan.modules.Rendering.ItemRenderLauncher;
 import Brendan.modules.Rendering.MetalStorageRender;
 import Brendan.modules.Rendering.OreRender;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -19,7 +23,8 @@ public class ClientProxy extends CommonProxy implements IClientProxy {
     {
         RenderingRegistry.registerBlockHandler(new MetalStorageRender());
         RenderingRegistry.registerBlockHandler(new OreRender());
-        RenderUtil.loadRenderingUtils();
+        RenderUtil.loadRenderingUtils();       
+        MinecraftForgeClient.registerItemRenderer(ModItems.SRod.itemID, (IItemRenderer)new ItemRenderLauncher());
     }
     
     @Override

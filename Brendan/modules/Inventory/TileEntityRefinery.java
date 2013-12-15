@@ -467,8 +467,7 @@ public class TileEntityRefinery extends TileEntity implements ISidedInventory
      * Returns true if automation can insert the given item in the given slot from the given side. Args: Slot, item,
      * side
      */
-    @Override
-	public boolean canInsertItem(int par1, ItemStack par2ItemStack, int par3)
+    public boolean canInsertItem(int par1, ItemStack par2ItemStack, int par3)
     {
         return this.isItemValidForSlot(par1, par2ItemStack);
     }
@@ -477,15 +476,8 @@ public class TileEntityRefinery extends TileEntity implements ISidedInventory
      * Returns true if automation can extract the given item in the given slot from the given side. Args: Slot, item,
      * side
      */
-    @Override
-	public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3)
+    public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3)
     {
         return par3 != 0 || par1 != 1 || par2ItemStack.itemID == Item.bucketEmpty.itemID;
     }
-
-	@Override
-	public void onInventoryChanged() {
-		// TODO Auto-generated method stub
-		
-	}
 }

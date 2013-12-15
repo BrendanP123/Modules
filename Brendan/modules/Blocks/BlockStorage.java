@@ -19,11 +19,13 @@ public class BlockStorage extends SCBlock {
     
     //Colours of the blocks
     public int[] colours = new int[] {
-    		0x7A4012,
+    		0xB87333,
             0xD7D7D7,
-            0xB0D1D1,
+            0xA6A6A6,
             0x6381AB,
-            0x3B4F88
+            0xA9C8F2,
+            0x740c16,
+            0x0F52BA
     };
     
     //Basic Infomation
@@ -44,12 +46,11 @@ public class BlockStorage extends SCBlock {
       return par1;
     }
     
-    //Adds more then 1 block
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 7; i++)
         {
             par3List.add(new ItemStack(par1, 1, i));
         }

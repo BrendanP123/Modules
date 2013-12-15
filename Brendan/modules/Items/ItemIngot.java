@@ -27,8 +27,8 @@ public class ItemIngot extends Item {
      * Constructor
      * @param id Item ID
      */
-	public ItemIngot(int id) {
-		super(id);
+	public ItemIngot(int par1) {
+		super(par1);
         this.setCreativeTab(Modules.creativeTabModulesItems);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);

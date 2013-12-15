@@ -10,8 +10,8 @@ import net.minecraft.item.ItemStack;
 
 public class ItemBlockStorage extends ItemBlock {
     public static String[] colours = new String[] { "Copper", "Tin", "Silver", "Lead", "Titanium" };
-	public static String[] types = new String[] {"blockCopper","blockTin","blockSilver","blockLead","blockTitanium"};
-	public static String[] names = new String[] {"Copper Storage","Tin Storage","Silver Storage", "Lead Storage","Titanium Storage"};
+	public static String[] types = new String[] {"blockCopper","blockTin","blockSilver","blockLead","blockTitanium", "blockRuby", "blockSapphire"};
+	public static String[] names = new String[] {"Copper Storage","Tin Storage","Silver Storage", "Lead Storage","Titanium Storage","Ruby Storage", "Sapphire Storage"};
 
     public ItemBlockStorage(int par1) {
         super(par1);
@@ -31,10 +31,9 @@ public class ItemBlockStorage extends ItemBlock {
         return par1;
     }
     
-    @SuppressWarnings("unchecked")
+	/** Returns the unlocalised name of the block*/
 	@Override
-    public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List list, boolean par4)
-    {
-        list.add(colours[(stack.getItemDamage() % 5)]);
-    }
+	public String getUnlocalizedName(ItemStack is) {
+		return names[is.getItemDamage()];
+	}
 }

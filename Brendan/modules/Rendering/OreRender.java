@@ -13,12 +13,13 @@ import Brendan.modules.Lib.RenderID;
 
 public class OreRender implements ISimpleBlockRenderingHandler {
     public int[] colours = new int[] {
-    		0x7A4012,
+    		0xB87333,
             0xD7D7D7,
-            0xB0D1D1,
+            0xA6A6A6,
             0x6381AB,
-            0x3B4F88,
-            0x9b111e
+            0xA9C8F2,
+            0x740c16,
+            0x0F52BA
         };
     
     @Override

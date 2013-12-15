@@ -27,14 +27,10 @@ public class Infuser extends BlockContainer {
 
 	private final boolean isActive;
 
-	@SideOnly(Side.CLIENT)
-	private Icon side;
-	@SideOnly(Side.CLIENT)
-	private Icon front;
-	@SideOnly(Side.CLIENT)
-	private Icon front_active;
-	@SideOnly(Side.CLIENT)
-	private Icon bottom;
+    @SideOnly(Side.CLIENT)
+    private Icon furnaceIconTop;
+    @SideOnly(Side.CLIENT)
+    private Icon furnaceIconFront;
 
 	private static boolean keepFurnaceInventory = false;
 
@@ -85,10 +81,10 @@ public class Infuser extends BlockContainer {
 		}
 	}
 	
-    @Override
+    /**@Override
 	public Icon getIcon(int par1, int par2)
     {
-        return par1 == 1 ? this.side : par1 == 0 ? this.bottom : (par1 == 1 ? this.front_active : (par1 != par2 ? this.blockIcon : this.front_active));
+    	return par1 == 1 ? this.side : (par1 == 0 ? this.bottom : (par1 != par2 ? this.blockIcon : this.front_active));
     }
 
     @Override
@@ -97,7 +93,7 @@ public class Infuser extends BlockContainer {
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
-     */
+     
     public void registerIcons(IconRegister par1IconRegister)
     {
         this.blockIcon = par1IconRegister.registerIcon("Modules:infuser_side");
@@ -106,19 +102,29 @@ public class Infuser extends BlockContainer {
         this.bottom = par1IconRegister.registerIcon("Modules:infuser_side");
  
     }
+    */
+	
+    /**
+     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
+     */
+    public Icon getIcon(int par1, int par2)
+    {
+        return par1 == 1 ? this.furnaceIconTop : (par1 == 0 ? this.furnaceIconTop : (par1 != par2 ? this.blockIcon : this.furnaceIconFront));
+    }
 
-	//public void registerIcons2(IconRegister par1IconRegister) {
-	//	this.field_94392_b = par1IconRegister.registerIcon("ModBlocks:infuser_side");
-	//	this.field_94459_cP = par1IconRegister.registerIcon(this.isActive ? "ModBlocks":"infuser_active_front");
-	//	this.field_94458_cA = par1IconRegister.registerIcon(this.isActive ? "ModBlocks":"infuser_active_side");
-	//	this.field_94392_a = par1IconRegister.registerIcon("ModBlocks:infuser_side");
-	//}
+    @SideOnly(Side.CLIENT)
 
-	//public Icon getBlockTextureFromSideAndMetadata2(int par1, int par2) {
-	//	return par1 == 1 ? this.field_94392_a : par1 == 0 ? this.field_94392_b : par1 == 0 ? this.field_94392_b
-	//			: (par1 != par2 ? this.blockIcon : this.field_94459_cP) : this.blockIcon : this.field_94459_cP);
-	//}
-
+    /**
+     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+     * is the only chance you get to register icons.
+     */
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.blockIcon = par1IconRegister.registerIcon("Modules:infuser_side");
+        this.furnaceIconFront = par1IconRegister.registerIcon(this.isActive ? "Modules:infuser_active_front" : "Modules:infuser_front");
+        this.furnaceIconTop = par1IconRegister.registerIcon("Modules:infuser_side");
+    }
+    
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World par1World, int par2, int par3,

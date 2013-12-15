@@ -10,7 +10,7 @@ import Brendan.modules.Lib.RarityHelper;
 
 public class ItemBlockOre extends ItemBlock{
 	
-	public static final String[] names = new String[] {"Copper Ore","Tin Ore","Silver Ore", "Lead Ore","Titanium Ore", "Ruby Ore"};
+	public static final String[] names = new String[] {"Copper Ore","Tin Ore","Silver Ore", "Lead Ore","Titanium Ore", "Ruby Ore", "Sapphire Ore"};
 	
 	
 	public ItemBlockOre(int id) {
@@ -31,4 +31,10 @@ public class ItemBlockOre extends ItemBlock{
     {
         return meta;
     }
+    
+	/** Returns the unlocalised name of the block*/
+	@Override
+	public String getUnlocalizedName(ItemStack is) {
+		return names[is.getItemDamage()];
+	}
 }
